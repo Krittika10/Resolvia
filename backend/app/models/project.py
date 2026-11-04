@@ -63,8 +63,8 @@ class Project(Base):
     "Issue",
     back_populates="project",
     )
+
     project_members = relationship(
     "ProjectMember",
     back_populates="project",
     )
-    

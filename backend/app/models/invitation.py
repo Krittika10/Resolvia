@@ -16,7 +16,14 @@ class Invitation(Base):
     """Stores invitations to join a workspace or project."""
 
     __tablename__ = "invitations"
-
+    __table_args__ = (
+    Index(
+        "ix_invitation_workspace_project_email",
+        "organisation_id",
+        "project_id",
+        "email",
+    ),
+)
     id = Column(Integer, primary_key=True, index=True)
 
     email = Column(String(150), nullable=False, index=True)
@@ -62,8 +69,8 @@ class Invitation(Base):
     )
 
     organisation = relationship(
-    "Organisation",
-    back_populates="invitations",
+      "Organisation",
+      back_populates="invitations",
     )
 
     project = relationship("Project")

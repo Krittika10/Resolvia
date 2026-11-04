@@ -34,3 +34,7 @@ class Activity(Base):
     )
 
     issue = relationship("Issue", back_populates="activities")
+    changed_by = relationship(
+    "User",
+    foreign_keys=[changed_by_id],
+    )

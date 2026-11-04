@@ -26,3 +26,13 @@ class User(Base):
         foreign_keys="Issue.assigned_to_id",
         back_populates="assignee",
     )
+    password_hash = Column(String(255), nullable=True)
+    memberships = relationship(
+        "Membership",
+        back_populates="user",
+    )
+    project_memberships = relationship(
+        "ProjectMember",
+        back_populates="user",
+    )
+    

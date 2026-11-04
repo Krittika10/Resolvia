@@ -58,6 +58,8 @@ def test_model_relationships_exist():
     assert hasattr(models.Invitation, "project")
     assert hasattr(models.Invitation, "inviter")
     assert hasattr(models.Organisation, "invitations")
+    assert hasattr(models.User, "memberships")
+    assert hasattr(models.User, "project_memberships")
 
 def test_sqlalchemy_can_configure_all_relationships():
     """Verify SQLAlchemy can resolve all model relationships."""

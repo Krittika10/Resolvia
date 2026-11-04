@@ -36,13 +36,11 @@ class Organisation(Base):
     memberships = relationship(
         "Membership",
         back_populates="organisation",
-        cascade="all, delete-orphan",
     )
 
     projects = relationship(
         "Project",
         back_populates="organisation",
-        cascade="all, delete-orphan",
     )
     invitations = relationship(
     "Invitation",

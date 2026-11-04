@@ -56,4 +56,8 @@ class Membership(Base):
         back_populates="memberships",
     )
 
-    user = relationship("User")
+    user = relationship(
+    "User",
+    back_populates="memberships",
+    )
+    
