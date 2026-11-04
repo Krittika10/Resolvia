@@ -61,7 +61,10 @@ class Invitation(Base):
         nullable=False,
     )
 
-    organisation = relationship("Organisation")
+    organisation = relationship(
+    "Organisation",
+    back_populates="invitations",
+    )
 
     project = relationship("Project")
 
@@ -69,4 +72,3 @@ class Invitation(Base):
         "User",
         foreign_keys=[invited_by_id],
     )
-    
