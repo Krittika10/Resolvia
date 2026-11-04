@@ -5,7 +5,7 @@ from app.database import Base
 
 
 def test_all_model_tables_are_registered():
-    """Verify all seven database models are registered."""
+    """Verify all eight database tables are registered."""
 
     expected_tables = {
         "users",
@@ -15,6 +15,7 @@ def test_all_model_tables_are_registered():
         "memberships",
         "projects",
         "project_members",
+        "invitations",
     }
 
     assert expected_tables.issubset(Base.metadata.tables.keys())
@@ -43,8 +44,23 @@ def test_model_relationships_exist():
     assert hasattr(models.ProjectMember, "project")
     assert hasattr(models.ProjectMember, "user")
 
+    assert hasattr(models.Invitation, "organisation")
+    assert hasattr(models.Invitation, "project")
+    assert hasattr(models.Invitation, "inviter")
+
 
 def test_sqlalchemy_can_configure_all_relationships():
     """Verify SQLAlchemy can resolve all model relationships."""
 
     configure_mappers()
+    assert all(mapper.configured for mapper in Base.registry.mappers)
+
+
+def test_invitation_model_fields_exist():
+    """Verify important invitation fields exist."""
+
+    assert hasattr(models.Invitation, "email")
+    assert hasattr(models.Invitation, "token_hash")
+    assert hasattr(models.Invitation, "expires_at")
+    assert hasattr(models.Invitation, "accepted_at")
+    assert hasattr(models.Invitation, "revoked_at")

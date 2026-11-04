@@ -5,6 +5,7 @@ from app.models.organisation import Organisation
 from app.models.membership import Membership
 from app.models.project import Project
 from app.models.project_member import ProjectMember
+from app.models.invitation import Invitation
 
 __all__ = [
     "User",
@@ -14,4 +15,5 @@ __all__ = [
     "Membership",
     "Project",
     "ProjectMember",
+    "Invitation",
 ]
