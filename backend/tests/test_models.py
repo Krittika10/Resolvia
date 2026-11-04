@@ -1,12 +1,21 @@
+from sqlalchemy.orm import configure_mappers
 
 from app import models
 from app.database import Base
 
 
-def test_existing_tables_are_registered():
-    """Verify all existing database models are registered."""
+def test_all_model_tables_are_registered():
+    """Verify all seven database models are registered."""
 
-    expected_tables = {"users", "issues", "activities"}
+    expected_tables = {
+        "users",
+        "issues",
+        "activities",
+        "organisations",
+        "memberships",
+        "projects",
+        "project_members",
+    }
 
     assert expected_tables.issubset(Base.metadata.tables.keys())
 
@@ -22,3 +31,20 @@ def test_model_relationships_exist():
     assert hasattr(models.Issue, "activities")
 
     assert hasattr(models.Activity, "issue")
+
+    assert hasattr(models.Organisation, "memberships")
+    assert hasattr(models.Organisation, "projects")
+
+    assert hasattr(models.Membership, "organisation")
+    assert hasattr(models.Membership, "user")
+
+    assert hasattr(models.Project, "organisation")
+
+    assert hasattr(models.ProjectMember, "project")
+    assert hasattr(models.ProjectMember, "user")
+
+
+def test_sqlalchemy_can_configure_all_relationships():
+    """Verify SQLAlchemy can resolve all model relationships."""
+
+    configure_mappers()
