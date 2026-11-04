@@ -1,3 +1,10 @@
+import sys
+from pathlib import Path
+
+backend_dir = str(Path(__file__).resolve().parents[1])
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
+
 from sqlalchemy.orm import configure_mappers
 
 from app import models
@@ -40,9 +47,12 @@ def test_model_relationships_exist():
     assert hasattr(models.Membership, "user")
 
     assert hasattr(models.Project, "organisation")
-
+    assert hasattr(models.Project, "project_members")
+    assert hasattr(models.Project, "issues")
     assert hasattr(models.ProjectMember, "project")
     assert hasattr(models.ProjectMember, "user")
+    assert hasattr(models.Issue, "project")
+    assert hasattr(models.Project, "issues")
 
     assert hasattr(models.Invitation, "organisation")
     assert hasattr(models.Invitation, "project")

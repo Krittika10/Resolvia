@@ -51,6 +51,9 @@ class ProjectMember(Base):
         nullable=False,
     )
 
-    project = relationship("Project")
+    project = relationship(
+    "Project",
+    back_populates="project_members",
+)
 
     user = relationship("User")

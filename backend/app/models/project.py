@@ -58,3 +58,13 @@ class Project(Base):
     )
 
     creator = relationship("User")
+
+    issues = relationship(
+    "Issue",
+    back_populates="project",
+    )
+    project_members = relationship(
+    "ProjectMember",
+    back_populates="project",
+    )
+    

@@ -36,6 +36,11 @@ class Issue(Base):
         ForeignKey("users.id"),
         nullable=True,
     )
+    project_id = Column(
+    Integer,
+    ForeignKey("projects.id"),
+    nullable=True,
+)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
@@ -57,3 +62,7 @@ class Issue(Base):
         back_populates="issue",
         cascade="all, delete-orphan",
     )
+    project = relationship(
+    "Project",
+    back_populates="issues",
+)
