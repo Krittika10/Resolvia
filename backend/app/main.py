@@ -1,6 +1,7 @@
 from sqlalchemy import func
 from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from app.database import Base, engine, get_db
@@ -15,7 +16,16 @@ app = FastAPI(
     description="Issue Tracking and Resolution Management System",
     version="1.0.0"
 )
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5500",
+        "http://127.0.0.1:5500"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def home():
@@ -294,3 +304,54 @@ def get_issue(issue_id: int, db: Session = Depends(get_db)):
         )
 
     return issue
+
+
+# -------------------------
+# RECENT ACTIVITY API
+# -------------------------
+
+@app.get("/activities/recent")
+def get_recent_activities(
+    limit: int = 10,
+    db: Session = Depends(get_db)
+):
+    # Validate the requested result limit
+    if limit < 1 or limit > 50:
+        raise HTTPException(
+            status_code=400,
+            detail="Limit must be between 1 and 50"
+        )
+
+    # Fetch activity records with issue and user information
+    activities = (
+        db.query(
+            models.Activity,
+            models.Issue.title,
+            models.User.name
+        )
+        .join(
+            models.Issue,
+            models.Activity.issue_id == models.Issue.id
+        )
+        .outerjoin(
+            models.User,
+            models.Activity.changed_by_id == models.User.id
+        )
+        .order_by(models.Activity.created_at.desc())
+        .limit(limit)
+        .all()
+    )
+
+    # Format the response
+    return [
+        {
+            "activity_id": activity.id,
+            "issue_id": activity.issue_id,
+            "issue_title": issue_title,
+            "action": activity.action,
+            "details": activity.details,
+            "changed_by": user_name,
+            "created_at": activity.created_at
+        }
+        for activity, issue_title, user_name in activities
+    ]

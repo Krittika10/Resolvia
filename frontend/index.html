@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolvia — Engineering Issue Control</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+
+    <div class="app-shell">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-name">RESOLVIA</span>
+            </div>
+
+<nav class="navigation">
+
+    <p class="nav-heading">WORKSPACE</p>
+
+    <a href="#" class="nav-link active" title="Overview">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Overview</span>
+    </a>
+
+    <a href="#" class="nav-link" title="Issue queue">
+        <i data-lucide="list"></i>
+        <span>Issue queue</span>
+    </a>
+
+    <a href="#" class="nav-link" title="My assignments">
+        <i data-lucide="clipboard-list"></i>
+        <span>My assignments</span>
+    </a>
+
+    <a href="#" class="nav-link" title="Activity log">
+        <i data-lucide="message-circle"></i>
+        <span>Activity log</span>
+    </a>
+
+    <p class="nav-heading management-heading">MANAGEMENT</p>
+
+    <a href="#" class="nav-link" title="Team">
+        <i data-lucide="users"></i>
+        <span>Team</span>
+    </a>
+
+    <a href="#" class="nav-link" title="Settings">
+        <i data-lucide="sliders-horizontal"></i>
+        <span>Settings</span>
+    </a>
+
+</nav>
+            <div class="sidebar-footer">
+                <span class="mono">SYSTEM STATUS</span>
+                <span class="status-indicator">● Operational</span>
+            </div>
+        </aside>
+
+        <!-- Main area -->
+        <main class="main-area">
+            <header class="topbar">
+    <div class="topbar-left">
+        <button
+            id="sidebar-toggle"
+            class="sidebar-toggle"
+            aria-label="Collapse sidebar"
+            aria-expanded="true"
+            title="Toggle sidebar"
+        >
+            ☰
+        </button>
+
+        <span class="mono">OVERVIEW</span>
+    </div>
+
+            </header>
+
+            <section class="page-content">
+                <div class="page-heading">
+                    <div>
+                        <p class="mono">CONTROL CENTER</p>
+                        <h1>Overview</h1>
+                        <p class="page-description">
+                            Monitor issues, assignments and resolution activity.
+                        </p>
+                    </div>
+                    <button class="primary-button" id="create-issue-btn">
+                    + Create issue
+                    </button>
+                </div>
+
+                <div id="dashboard-content">
+
+    <!-- Issue workload -->
+    <section class="dashboard-section">
+        <div class="section-heading">
+            <div>
+                <p class="mono">SYSTEM SNAPSHOT</p>
+                <h2>Issue workload</h2>
+            </div>
+        </div>
+
+        <div class="metrics-grid" id="metrics-grid">
+            <div class="metric-panel">
+                <span>Total issues</span>
+                <strong id="total-issues">—</strong>
+            </div>
+            <div class="metric-panel">
+                <span>Open</span>
+                <strong id="open-issues">—</strong>
+            </div>
+            <div class="metric-panel">
+                <span>In progress</span>
+                <strong id="progress-issues">—</strong>
+            </div>
+            <div class="metric-panel">
+                <span>Resolved</span>
+                <strong id="resolved-issues">—</strong>
+            </div>
+        </div>
+    </section>
+
+    <!-- Issue queue -->
+    <section class="dashboard-section">
+        <div class="section-heading">
+            <div>
+                <p class="mono">TRACKING</p>
+                <h2>Priority queue</h2>
+            </div>
+            <a href="#" class="text-link">View all issues →</a>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ISSUE</th>
+                        <th>PRIORITY</th>
+                        <th>STATUS</th>
+                        <th>ASSIGNEE</th>
+                    </tr>
+                </thead>
+                <tbody id="issue-table-body">
+                    <tr>
+                        <td colspan="4">Loading issues...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Recent activity -->
+    <section class="dashboard-section">
+        <div class="section-heading">
+            <div>
+                <p class="mono">AUDIT TRAIL</p>
+                <h2>Recent activity</h2>
+            </div>
+        </div>
+
+        <div id="recent-activity">
+            Loading activity...
+        </div>
+    </section>
+
+</div>
+            </section>
+        </main>
+
+    </div>
+    <!-- CREATE ISSUE MODAL -->
+     
+<!-- ISSUE DETAILS SIDE PANEL -->
+<div class="details-overlay" id="details-overlay" hidden>
+    <aside class="details-panel" id="details-panel">
+
+        <div class="details-header">
+            <div>
+                <p class="mono">ISSUE DETAILS</p>
+                <h2 id="detail-issue-id">ISSUE #</h2>
+            </div>
+
+            <button
+                type="button"
+                id="close-details"
+                class="modal-close"
+                aria-label="Close issue details"
+            >&times;</button>
+        </div>
+
+        <div class="details-body">
+
+            <h2 id="detail-title">Issue title</h2>
+
+            <p id="detail-description">
+                Issue description will appear here.
+            </p>
+
+            <div class="details-divider"></div>
+
+            <p class="mono">ISSUE PROPERTIES</p>
+
+            <div class="detail-field">
+                <label for="detail-status">Status</label>
+                <select id="detail-status">
+                    <option value="Open">Open</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Closed">Closed</option>
+                </select>
+            </div>
+
+            <div class="detail-field">
+                <label for="detail-priority">Priority</label>
+                <select id="detail-priority">
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
+                </select>
+            </div>
+
+            <div class="detail-field">
+                <label>Reporter</label>
+                <p id="detail-reporter">—</p>
+            </div>
+
+            <div class="detail-field">
+                <label>Assignee</label>
+                <p id="detail-assignee">—</p>
+            </div>
+
+            <div class="details-divider"></div>
+
+            <p class="mono">RESOLUTION TRACE</p>
+
+            <div id="resolution-trace">
+                Loading activity history...
+            </div>
+
+        </div>
+
+        <div class="details-footer">
+            <button
+                type="button"
+                id="save-issue-details"
+                class="primary-button"
+            >
+                Save changes
+            </button>
+        </div>
+
+    </aside>
+</div>
+
+<div class="modal-overlay" id="issue-modal" hidden>
+    <div class="modal">
+
+        <div class="modal-header">
+            <div>
+                <p class="mono">ISSUE MANAGEMENT</p>
+                <h2>Create new issue</h2>
+            </div>
+
+            <button type="button" id="close-issue-modal"
+                    class="modal-close" aria-label="Close">
+                &times;
+            </button>
+        </div>
+
+        <form id="create-issue-form">
+
+            <div class="form-group">
+                <label for="issue-title">Issue title</label>
+                <input
+                    type="text"
+                    id="issue-title"
+                    name="title"
+                    placeholder="e.g. Login button not working"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="issue-description">Description</label>
+                <textarea
+                    id="issue-description"
+                    name="description"
+                    rows="4"
+                    placeholder="Describe the issue and how to reproduce it..."
+                    required
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="issue-priority">Priority</label>
+                <select id="issue-priority" name="priority">
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="issue-reporter">Reported by</label>
+                <select id="issue-reporter" name="reporter_id" required>
+                    <option value="">Select reporter</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="issue-assignee">Assign to</label>
+                <select id="issue-assignee" name="assigned_to_id">
+                    <option value="">Unassigned</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" id="cancel-issue"
+                        class="secondary-button">
+                    Cancel
+                </button>
+
+                <button type="submit" class="primary-button">
+                    Create issue
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+ <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
